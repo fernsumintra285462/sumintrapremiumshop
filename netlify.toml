@@ -1,9 +1,3 @@
 [build]
   publish = "."
   functions = "netlify/functions"
-
-[[redirects]]
-  from = "/api/verify-slip"
-  to = "/.netlify/functions/verify-slip"
-  status = 200
-  force = true
