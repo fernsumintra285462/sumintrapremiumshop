@@ -40,7 +40,16 @@ export default async (request) => {
 
     const outgoing = new FormData();
     outgoing.append('files', file);
-    if (amount) outgoing.append('amount', amount);
+    if (amount) {
+      // ส่งยอดเงินเป็นทศนิยม 2 ตำแหน่งเสมอ (เช่น 10 -> "10.00")
+      // เผื่อ SlipOK เทียบยอดแบบต้องการรูปแบบทศนิยมตรงกับที่อ่านได้จาก QR Code ในสลิป
+      const numericAmount = Number(amount);
+      if (!Number.isNaN(numericAmount)) {
+        outgoing.append('amount', numericAmount.toFixed(2));
+      } else {
+        outgoing.append('amount', amount);
+      }
+    }
     outgoing.append('log', 'true');
 
     const res = await fetch(
