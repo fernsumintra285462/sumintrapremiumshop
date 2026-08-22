@@ -1383,12 +1383,8 @@
     const totalProducts = DB.products.length;
     const totalStock = DB.products.reduce((s,p) => s + availableCount(p), 0);
     const totalSold = DB.products.reduce((s,p) => s + p.stockItems.filter(i => i.status === 'used').length, 0);
-    const customerSet = new Set();
-    DB.orders.forEach(o => {
-      const key = o.customer.email || o.customer.phone || o.customer.name;
-      if(key) customerSet.add(key);
-    });
-    return { totalUsers: customerSet.size, totalProducts, totalStock, totalSold };
+   const totalUsers = DB.customers.length;
+    return { totalUsers, totalProducts, totalStock, totalSold };
   }
 
   function renderStoreStats(){
