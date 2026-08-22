@@ -981,9 +981,26 @@
     }
   }
 
-  async function persistSettings(){
-    await storageSet('nextpass_settings', JSON.stringify(DB.settings));
+async function persistSettings(){
+  if(!firebaseReady || !fbDb) return;
+  try{
+    await fbDb.collection('settings').doc('shop').set(DB.settings);
+  } catch(e){
+    console.error('persistSettings failed:', e);
   }
+}
+
+async function loadSettingsFromFirestore(){
+  if(!firebaseReady || !fbDb) return;
+  try{
+    const doc = await fbDb.collection('settings').doc('shop').get();
+    if(doc.exists){
+      Object.assign(DB.settings, doc.data());
+    }
+  } catch(e){
+    console.error('loadSettingsFromFirestore failed:', e);
+  }
+}
 
   /* ============================ THEME PRESETS ============================ */
   const THEME_PRESETS = {
@@ -1364,6 +1381,7 @@
 
   function renderStoreView(){
     routerEl.innerHTML = storeTemplate();
+    loadSettingsFromFirestore();
     updateStoreGrid();
     loadAllCustomersFromFirestore();
     renderStoreStats();
