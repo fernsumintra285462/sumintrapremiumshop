@@ -1365,6 +1365,7 @@
   function renderStoreView(){
     routerEl.innerHTML = storeTemplate();
     updateStoreGrid();
+    loadAllCustomersFromFirestore();
     renderStoreStats();
     const input1 = document.getElementById('headerSearchInput');
     const input2 = document.getElementById('catSearchInput');
