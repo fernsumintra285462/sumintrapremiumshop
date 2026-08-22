@@ -3362,7 +3362,8 @@ async function loadSettingsFromFirestore(){
         return;
       }
 
-      state.adminAuth = true;
+      if(firebaseReady && fbAuth){ try { await fbAuth.signInAnonymously(); } catch(e){ console.error('anon sign-in failed', e); } }
+        state.adminAuth = true;
       state.adminSection = 'dashboard';
       goto('admin');
       showToast('เข้าสู่ระบบสำเร็จ');
